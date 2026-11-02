@@ -1,0 +1,8 @@
+*
+!*/
+
+!/.gitignore
+
+!/CMakeLists.txt
+
+!/test_hello.cpp
