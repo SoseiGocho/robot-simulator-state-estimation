@@ -1,0 +1,41 @@
+name: CMake CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os }} / ${{ matrix.configuration }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        configuration:
+          - debug
+          - release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Show CMake version
+        run: cmake --version
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.configuration }}
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.configuration }} --parallel
+
+      - name: Test
+        run: ctest --preset ${{ matrix.configuration }}
